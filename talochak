@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tal Ochakovsky — CPA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0F0E0C;
+      --bg2: #181612;
+      --ink: #F0EDE6;
+      --muted: #9A9690;
+      --accent: #D4A853;
+      --border: #2A2820;
+      --serif: 'Fraunces', Georgia, serif;
+      --sans: 'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.7; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 5vw;
+      background: rgba(15,14,12,0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--serif); font-size: 1.1rem; font-weight: 300; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.82rem; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1.4fr 0.6fr;
+      align-items: center; gap: 4rem;
+      padding: 10rem 5vw 6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-tag {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid var(--accent); padding: 0.3rem 0.8rem;
+      border-radius: 999px; margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards 0.2s;
+    }
+    .hero h1 {
+      font-family: var(--serif); font-size: clamp(2.8rem, 6vw, 5.2rem);
+      font-weight: 300; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.8rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards 0.35s;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero-desc {
+      font-size: 1.05rem; color: var(--muted); line-height: 1.85; max-width: 480px;
+      margin-bottom: 2.5rem; font-weight: 300;
+      opacity: 0; animation: fadeUp 0.7s ease forwards 0.5s;
+    }
+    .hero-desc strong { color: var(--ink); font-weight: 500; }
+    .hero-buttons {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s ease forwards 0.65s;
+    }
+    .btn { display: inline-block; text-decoration: none; padding: 0.75rem 1.7rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.04em; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: #0F0E0C; }
+    .btn-primary:hover { background: #C49840; }
+    .btn-secondary { border: 1px solid var(--border); color: var(--muted); }
+    .btn-secondary:hover { border-color: var(--muted); color: var(--ink); }
+
+    .hero-right { opacity: 0; animation: fadeUp 0.9s ease forwards 0.5s; }
+    .photo-frame {
+      border-radius: 16px; overflow: hidden; aspect-ratio: 4/5;
+      background: var(--bg2); border: 1px solid var(--border);
+    }
+    .photo-placeholder {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem;
+      color: var(--muted); font-size: 0.82rem; text-align: center; padding: 2rem;
+    }
+    .photo-placeholder svg { opacity: 0.25; }
+    .photo-caption { margin-top: 1rem; font-size: 0.78rem; color: var(--muted); font-style: italic; text-align: center; }
+
+    /* SECTIONS */
+    section {
+      padding: 7rem 5vw; border-bottom: 1px solid var(--border);
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    section.visible { opacity: 1; transform: none; }
+    .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 4rem; }
+    .section-num { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+    .section-title { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; line-height: 1.1; }
+    .section-title em { font-style: italic; color: var(--muted); }
+
+    /* ABOUT */
+    .about-body { display: grid; grid-template-columns: 2fr 1fr; gap: 6rem; align-items: start; }
+    .about-body p { font-size: 1.05rem; color: var(--muted); font-weight: 300; line-height: 1.9; margin-bottom: 1.2rem; }
+    .about-body p strong { color: var(--ink); font-weight: 500; }
+    .stat { padding: 1.4rem 0; border-bottom: 1px solid var(--border); }
+    .stat-number { font-family: var(--serif); font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 0.3rem; }
+    .stat-label { font-size: 0.8rem; color: var(--muted); }
+
+    /* EXPERIENCE */
+    .exp-list { max-width: 720px; }
+    .exp-item { display: grid; grid-template-columns: 90px 1fr; gap: 2.5rem; padding: 2.2rem 0; border-bottom: 1px solid var(--border); align-items: start; }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-years { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; padding-top: 4px; }
+    .exp-role { font-family: var(--serif); font-size: 1.25rem; font-weight: 400; margin-bottom: 0.3rem; }
+    .exp-org { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+
+    /* EXPERTISE */
+    .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .project-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+      padding: 2.5rem; transition: border-color 0.3s, transform 0.3s;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .project-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+    .project-card h3 { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; margin-bottom: 0.8rem; }
+    .project-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.75; font-weight: 300; }
+
+    /* CONTACT */
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .contact-inner h2 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.1; margin-bottom: 1.5rem; }
+    .contact-inner h2 em { font-style: italic; color: var(--muted); }
+    .contact-inner > div:first-child p { color: var(--muted); font-size: 1rem; font-weight: 300; line-height: 1.8; }
+    .contact-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.5rem 0; border-bottom: 1px solid var(--border);
+      text-decoration: none; color: var(--ink); transition: color 0.2s;
+    }
+    .contact-row:hover { color: var(--accent); }
+    .contact-row-label { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+    .contact-row-value { font-size: 1rem; }
+    .contact-arrow { font-size: 1.2rem; opacity: 0.4; }
+
+    /* FOOTER */
+    footer { padding: 2rem 5vw; display: flex; justify-content: space-between; align-items: center; }
+    footer p { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── PHOTO ── */
+    header { position: relative; }
+    .hero-photo {
+      position: absolute;
+      top: 50%;
+      right: 5vw;
+      transform: translateY(-50%);
+      width: clamp(160px, 20vw, 300px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--rule);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    @media (max-width: 700px) {
+      .hero-photo { position: static; transform: none; width: 100px; margin-bottom: 2rem; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; padding-top: 8rem; }
+      .hero-right { order: -1; max-width: 280px; margin: 0 auto; }
+      .about-body { grid-template-columns: 1fr; gap: 3rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .exp-item { grid-template-columns: 1fr; gap: 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">Tal Ochakovsky</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-left">
+      <span class="hero-tag">CPA · Toronto, ON</span>
+      <h1>I turn financial complexity into <em>operational clarity.</em></h1>
+      <p class="hero-desc">
+        I'm a <strong>Chartered Professional Accountant</strong> and Senior Programs Process Specialist at <strong>Hydro One</strong> — bridging deep financial expertise with process thinking to make large organizations run better.
+      </p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn btn-primary">Get in touch</a>
+        <a href="#experience" class="btn btn-secondary">See my work ↓</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="photo-frame">
+        <img src="data:image/jpeg;base64,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" alt="Tal Ochakovsky" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:inherit;" />
+      </div>
+      <p class="photo-caption">Senior Programs Process Specialist · Hydro One</p>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">A little about <em>me</em></h2>
+    </div>
+    <div class="about-body">
+      <div>
+        <p>I've spent the past <strong>8+ years at Hydro One</strong>, one of Canada's largest electricity transmission and distribution companies — growing from Accounting Analyst to Senior Programs Process Specialist. Along the way I earned my <strong>CPA designation</strong> and developed a passion for building systems that make financial and operational workflows more effective.</p>
+        <p>I studied at <strong>Schulich School of Business, York University</strong> (2010–2014), and since 2019 I've volunteered as a <strong>CPA Mentor</strong> — helping the next generation of accountants navigate the profession and build their careers.</p>
+        <p>Good process is invisible when it works. My job is to make sure it works.</p>
+      </div>
+      <div>
+        <div class="stat"><div class="stat-number">8+</div><div class="stat-label">Years at Hydro One</div></div>
+        <div class="stat"><div class="stat-number">CPA</div><div class="stat-label">Chartered Professional Accountant</div></div>
+        <div class="stat"><div class="stat-number">5+</div><div class="stat-label">Years mentoring CPAs</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Where I've <em>worked</em></h2>
+    </div>
+    <div class="exp-list">
+      <div class="exp-item">
+        <span class="exp-years">3 years</span>
+        <div><div class="exp-role">Senior Programs Process Specialist</div><div class="exp-org">Hydro One</div></div>
+      </div>
+      <div class="exp-item">
+        <span class="exp-years">2 years</span>
+        <div><div class="exp-role">Senior Accounting & Financial Analyst</div><div class="exp-org">Hydro One</div></div>
+      </div>
+      <div class="exp-item">
+        <span class="exp-years">3 years</span>
+        <div><div class="exp-role">Accounting & Financial Analyst</div><div class="exp-org">Hydro One</div></div>
+      </div>
+      <div class="exp-item">
+        <span class="exp-years">2019 – Present</span>
+        <div><div class="exp-role">CPA Mentor</div><div class="exp-org">Volunteer · CPA Canada</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="expertise">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">What I'm <em>good at</em></h2>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <span class="project-icon">📊</span>
+        <h3>Financial Reporting & Analysis</h3>
+        <p>Deep experience in financial statement preparation, variance analysis, and reporting across complex regulated utility environments.</p>
+      </div>
+      <div class="project-card">
+        <span class="project-icon">⚙️</span>
+        <h3>Process Design & Optimization</h3>
+        <p>Designing and streamlining operational processes to improve efficiency, accountability, and scalability across large programs.</p>
+      </div>
+      <div class="project-card">
+        <span class="project-icon">🤝</span>
+        <h3>Mentorship & Development</h3>
+        <p>Guiding aspiring CPAs through their professional journey — helping them build technical skills and career confidence since 2019.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact-inner">
+      <div>
+        <h2>Let's connect <em>and build something.</em></h2>
+        <p>Whether it's a professional opportunity, a mentoring conversation, or just a hello — my inbox is open. I'd love to hear from you.</p>
+      </div>
+      <div>
+        <a href="mailto:tal.ochak@gmail.com" class="contact-row">
+          <div><div class="contact-row-label">Email</div><div class="contact-row-value">tal.ochak@gmail.com</div></div>
+          <span class="contact-arrow">→</span>
+        </a>
+        <a href="https://ca.linkedin.com/in/tal-ochakovsky" target="_blank" class="contact-row">
+          <div><div class="contact-row-label">LinkedIn</div><div class="contact-row-value">linkedin.com/in/tal-ochakovsky</div></div>
+          <span class="contact-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Tal Ochakovsky · CPA</p>
+    <p>Toronto, ON · Canada</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('section').forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
